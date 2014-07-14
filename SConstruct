@@ -1,32 +1,38 @@
 import subprocess as sp
 import os
 
+def call(cmd):
+    print " ".join(cmd)
+    output = sp.check_output(cmd)
+    return output
+
+
 def make_gh_pages(target, source, env):
+    target_name, = map(lambda x: x.name, target)
+    sources_names = map(lambda x: x.name, source)
+
     # checkout the gh-pages branch, and pull in the relevant files
     # from master (e.g. images, stylesheets, etc.)
-    sp.call(["git checkout", "gh-pages"])
-    sp.call(["git checkout", "master", "--"] + source[1:])
+    call(["git", "checkout", "gh-pages"])
+    call(["git", "checkout", "master", "--"] + sources_names[1:])
 
     # copy the slides to index.html and update them in the index
-    sp.call(["cp", source[0], target])
-    sp.call(["git add", "-A", target])
-
+    call(["cp", sources_names[0], target_name])
+    call(["git", "add", "-A", target_name])
     # update the other files as well
-    for src in source:
-        sp.call(["git add", "-A", src])
+    call(["git", "add", "-A"] + sources_names[1:])
 
     # commit the changes, and push them to github if it's not a dryrun
-    sp.call(["git commit", "-m", "Generated gh-pages for `git log master -1 --pretty=short --abbrev-commit`"])
-    if not env["DRYRUN"]:
-        sp.call(["git push", "origin" "gh-pages"])
+    commit = call(["git", "log", "master", "-1", "--pretty=oneline", "--abbrev-commit"]).strip()
+    call(["git", "commit", "-m", '"Generated gh-pages for {}"'.format(commit)])
+    call(["git", "push", "origin" "gh-pages"])
 
     # checkout the master branch again
-    sp.call(["git checkout", "master"])
+    call(["git", "checkout", "master"])
 
 
 ## Create the environment
 env = Environment(ENV=os.environ)
-env['PREFIX'] = "mental-rotation-cogsci2014"
 
 
 ## Specify nbconvert target, to generate the slides
