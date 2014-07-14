@@ -46,3 +46,11 @@ blockquote {
     content: none !important;
   }
 }
+
+.reveal .slide-number {
+    font-size: 1em;
+    color: black;
+    opacity: 1;
+    right: 2em;
+    bottom: 2em;
+}
