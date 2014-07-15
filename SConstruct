@@ -25,7 +25,7 @@ def make_gh_pages(target, source, env):
     # commit the changes, and push them to github if it's not a dryrun
     commit = call(["git", "log", "master", "-1", "--pretty=oneline", "--abbrev-commit"]).strip()
     call(["git", "commit", "-m", '"Generated gh-pages for {}"'.format(commit)])
-    call(["git", "push", "origin" "gh-pages"])
+    call(["git", "push", "origin", "gh-pages"])
 
     # checkout the master branch again
     call(["git", "checkout", "master"])
@@ -38,12 +38,12 @@ env = Environment(ENV=os.environ)
 ## Specify nbconvert target, to generate the slides
 env.Command(
     "mental-rotation-cogsci2014.slides.html",
-    ["mental-rotation-cogsci2014.ipynb", "reveal.tpl", "reveal.js"],
+    ["mental-rotation-cogsci2014.ipynb", "reveal.tpl", "hide_input.tpl", "reveal.js"],
     " ".join([
         "ipython nbconvert",
         "--RevealHelpTransformer.url_prefix=reveal.js",
         "--to slides",
-        "--template reveal.tpl",
+        "--template hide_input.tpl",
         "$SOURCE"]))
 
 env.Alias("slides", "mental-rotation-cogsci2014.slides.html")
