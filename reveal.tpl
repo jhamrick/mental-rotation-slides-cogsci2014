@@ -158,7 +158,7 @@ controls: false,
 progress: false,
 history: true,
 center: false,
-slideNumber: true,
+slideNumber: false,
 
 theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
 transition: 'none',
