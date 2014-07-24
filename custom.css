@@ -80,3 +80,8 @@ a.anchor-link {
     padding: 0 !important;
     display: none !important;
 }
+
+p.tiny {
+    font-size: 0.7em;
+    font-style: italic;
+}
